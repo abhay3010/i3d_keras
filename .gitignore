@@ -2,3 +2,8 @@
 data/frames/
 data/viz_results/
 *.npy
+.vscode
+dataset
+.devcontainer
+*/__pycache__/
+
