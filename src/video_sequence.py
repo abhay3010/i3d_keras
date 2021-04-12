@@ -4,7 +4,7 @@ import pathlib
 from video_utils import get_video_frames
 import json
 class VideoframeGenerator(keras.utils.Sequence):
-    def __init__(self,dataset_root, json_filename,dataset_type,label_file, resize=True, resize_shape=(112, 112), batch_size=1, frames=256):
+    def __init__(self,dataset_root, json_filename,dataset_type,label_file, resize=True, resize_shape=(112, 112), batch_size=2, frames=256):
         super(VideoframeGenerator, self).__init__()
         self.dataset_root = dataset_root
         self.json_filename = json_filename
@@ -55,7 +55,7 @@ class VideoframeGenerator(keras.utils.Sequence):
             x = get_video_frames(str(path), self.resize, self.resize_shape)
             if x.shape[0] < 256:
                 x = np.pad(x, ((0, 256 - x.shape[0]), (0, 0), (0, 0), (0, 0)), 'constant')
-            X[i,] = x
+            X[i,] = x/255.0
         
         return X, Y
     

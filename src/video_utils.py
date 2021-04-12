@@ -31,4 +31,4 @@ def get_video_frames(video_filepath, resize=True,  resize_shape=(112, 112)):
             frames.append(frame)
     finally:
         cap.release()
-    return np.array(frames)
+    return np.array(frames).astype('uint8')
