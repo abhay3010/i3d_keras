@@ -19,13 +19,13 @@ class VideoframeGenerator(keras.utils.Sequence):
         v_path = self.basepath.joinpath(json_filename)
         if not v_path.exists():
             raise ValueError("No jsonfile in basebath named {0}".format(json_filename))
-        with open(v_path, "r+") as f:
+        with open(str(v_path), "r+") as f:
             self._videos = json.load(f)['tubes' ]
         label_file_path = self.basepath.joinpath(label_file)
         if not label_file_path.exists():
             raise ValueError("Not label file with name {0} found in basepath".format(label_file))
         self.class_labels_map = dict()
-        with open(label_file_path,'r+') as f:
+        with open(str(label_file_path),'r+') as f:
             self.class_labels_map = {v:k for k,v in enumerate([l[:-1] for l in f.readlines()])}
         self.on_epoch_end()
         
