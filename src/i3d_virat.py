@@ -3,6 +3,7 @@ from keras.layers import Dropout
 from keras.models import Sequential
 from keras.layers import Flatten
 from i3d_inception import Inception_Inflated3d
+from keras.callbacks import ModelCheckpoint
 from video_sequence import VideoframeGenerator
 def get_i3d_virat(input_shape,weights=None, dropout_prob=0.0):
     base_layer = Sequential()
@@ -16,12 +17,14 @@ def get_i3d_virat(input_shape,weights=None, dropout_prob=0.0):
 
 def main():
     dataset_root = "/workspaces/i3d_keras/dataset/TinyVIRAT/"
-    shape = (256, 112, 112, 3)
+    shape = (128, 112, 112, 3)
     training_generator = VideoframeGenerator(dataset_root, "tiny_train.json","train", "classes.txt")
     test_generator = VideoframeGenerator(dataset_root, "tiny_test.json","test", "classes.txt")
-    model = get_i3d_virat((256, 112, 112, 3), 'rgb_kinetics_only')
+    model = get_i3d_virat(shape, 'rgb_kinetics_only')
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit_generator(training_generator, epochs=1)
-    model.evaluate_generator(test_generator)
+    checkpointer = ModelCheckpoint(filepath='/workspaces/i3d_keras/dataset/TinyVIRAT/tmp1.hdf5', verbose=1, save_best_only=True)
+
+    model.fit_generator(training_generator, epochs=1, use_multiprocessing=True, callbacks=[checkpointer] )
+    #model.evaluate_generator(test_generator)
 if __name__ == '__main__':
     main()
