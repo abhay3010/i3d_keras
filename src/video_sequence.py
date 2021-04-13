@@ -4,7 +4,7 @@ import pathlib
 from video_utils import get_video_frames
 import json
 class VideoframeGenerator(keras.utils.Sequence):
-    def __init__(self,dataset_root, json_filename,dataset_type,label_file, resize=True, resize_shape=(112, 112), batch_size=1, frames=128):
+    def __init__(self,dataset_root, json_filename,dataset_type,label_file, resize=True, resize_shape=(112, 112), batch_size=1, frames=128, shuffle=True):
         super(VideoframeGenerator, self).__init__()
         self.dataset_root = dataset_root
         self.json_filename = json_filename
@@ -14,6 +14,7 @@ class VideoframeGenerator(keras.utils.Sequence):
         self.batch_size = batch_size
         self.basepath = pathlib.Path(dataset_root)
         self.frames = frames
+        self.shuffle = shuffle
         if not self.basepath.exists():
             raise ValueError("Invalid basepath {0}".format(dataset_root))
         v_path = self.basepath.joinpath(json_filename)
@@ -35,7 +36,8 @@ class VideoframeGenerator(keras.utils.Sequence):
     
     def on_epoch_end(self):
         self.indexes = np.arange(len(self._videos))
-        np.random.shuffle(self.indexes)
+        if self.shuffle:
+            np.random.shuffle(self.indexes)
     
     def __getitem__(self, index):
         indexes = self.indexes[index*self.batch_size: (index+1)*self.batch_size]
