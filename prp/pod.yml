@@ -4,14 +4,19 @@ metadata:
   name: virat-testpod
 spec:
   containers:
-  - name: tf-pod
+  - name: virat-testpod
     image: tensorflow/tensorflow:1.13.1-gpu-py3
     args: ["sleep", "infinity"]
     resources:
       limits:
         nvidia.com/gpu: 1
-        memory: "12Gi"
+        memory: "8Gi"
         cpu: "2000m"
+      requests:
+        nvidia.com/gpu: 1
+        memory: "8Gi"
+        cpu: "2000m"
+
 
     volumeMounts:
     - mountPath: /virat-vr
