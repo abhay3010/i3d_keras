@@ -4,6 +4,7 @@ data/viz_results/
 *.npy
 .vscode
 dataset
+models
 .devcontainer
 */__pycache__/
 
